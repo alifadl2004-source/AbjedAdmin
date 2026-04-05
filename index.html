@@ -27,7 +27,7 @@
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             margin-bottom: 30px;
             text-align: center;
         }
@@ -45,7 +45,7 @@
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             margin-bottom: 30px;
         }
 
@@ -104,7 +104,7 @@
             background: white;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
 
@@ -124,7 +124,15 @@
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .users-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .search-box {
@@ -136,14 +144,6 @@
             font-size: 16px;
         }
 
-        .users-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
         .users-table-wrapper {
             width: 100%;
             overflow-x: auto;
@@ -153,8 +153,8 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
             min-width: 760px;
+            border-collapse: collapse;
         }
 
         th, td {
@@ -195,6 +195,7 @@
             display: flex;
             gap: 10px;
             justify-content: flex-end;
+            flex-wrap: wrap;
         }
 
         .actions button {
@@ -212,7 +213,7 @@
             padding: 14px;
             margin-bottom: 12px;
             background: #fff;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
         }
 
         .user-card-header {
@@ -365,10 +366,6 @@
             .mobile-users-list {
                 display: block;
             }
-
-            .actions {
-                flex-wrap: wrap;
-            }
         }
 
         @media (max-width: 480px) {
@@ -399,11 +396,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎓 لوحة تحكم الاشتراكات</h1>
+            <h1>لوحة تحكم الاشتراكات</h1>
             <p>إدارة المستخدمين والاشتراكات</p>
         </div>
 
-        <!-- Login Section -->
         <div id="loginSection" class="login-section">
             <h2 style="margin-bottom: 20px;">تسجيل دخول المسؤول</h2>
             <input type="email" id="adminEmail" placeholder="البريد الإلكتروني">
@@ -412,9 +408,7 @@
             <div id="loginError"></div>
         </div>
 
-        <!-- Dashboard Section -->
         <div id="dashboardSection" class="hidden">
-            <!-- Statistics -->
             <div class="stats">
                 <div class="stat-card">
                     <h3>إجمالي المستخدمين</h3>
@@ -434,15 +428,14 @@
                 </div>
             </div>
 
-            <!-- Users Table -->
             <div class="users-section">
                 <div class="users-toolbar">
                     <h2>قائمة المستخدمين</h2>
                     <button class="btn btn-warning" onclick="logout()">تسجيل الخروج</button>
                 </div>
-                
-                <input type="text" class="search-box" id="searchBox" placeholder="🔍 البحث عن مستخدم..." onkeyup="filterUsers()">
-                
+
+                <input type="text" class="search-box" id="searchBox" placeholder="البحث عن مستخدم..." onkeyup="filterUsers()">
+
                 <div id="usersTable">
                     <div class="loading">جاري تحميل البيانات...</div>
                 </div>
@@ -450,13 +443,11 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAtlvi9FkkEn-opEaYpicOgIJO_1z1ZOds",
             authDomain: "abjedsub.firebaseapp.com",
@@ -474,7 +465,6 @@
         let allUsers = [];
         let currentAdmin = null;
 
-        // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentAdmin = user;
@@ -488,7 +478,6 @@
             }
         });
 
-        // Admin Login
         window.adminLogin = async function() {
             const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
@@ -497,17 +486,14 @@
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 currentAdmin = userCredential.user;
-                
                 document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('dashboardSection').classList.remove('hidden');
-                
                 await loadUsers();
             } catch (error) {
                 errorDiv.innerHTML = `<div class="error">خطأ: ${error.message}</div>`;
             }
         };
 
-        // Logout
         window.logout = async function() {
             await signOut(auth);
             document.getElementById('loginSection').classList.remove('hidden');
@@ -515,21 +501,19 @@
             currentAdmin = null;
         };
 
-        // Load Users
         async function loadUsers() {
             try {
                 const usersSnapshot = await getDocs(collection(db, 'users'));
                 allUsers = [];
-                
+
                 console.log('Total users found:', usersSnapshot.size);
-                
-                usersSnapshot.forEach((doc) => {
-                    const userData = doc.data();
+
+                usersSnapshot.forEach((documentItem) => {
+                    const userData = documentItem.data();
                     console.log('User data:', userData);
-                    allUsers.push({ 
-                        id: doc.id, 
+                    allUsers.push({
+                        id: documentItem.id,
                         ...userData,
-                        // تأكد من وجود الحقول الضرورية
                         email: userData.email || 'غير محدد',
                         displayName: userData.displayName || userData.display_name || 'غير محدد',
                         is_premium: userData.is_premium || false,
@@ -546,11 +530,10 @@
             }
         }
 
-        // Update Statistics
         function updateStats() {
             const total = allUsers.length;
-            const premium = allUsers.filter(u => u.is_premium === true).length;
-            const trial = allUsers.filter(u => {
+            const premium = allUsers.filter((u) => u.is_premium === true).length;
+            const trial = allUsers.filter((u) => {
                 if (u.is_premium) return false;
                 try {
                     const endDate = new Date(u.trial_end_date);
@@ -559,7 +542,7 @@
                     return false;
                 }
             }).length;
-            const expired = allUsers.filter(u => {
+            const expired = allUsers.filter((u) => {
                 if (u.is_premium) return false;
                 try {
                     const endDate = new Date(u.trial_end_date);
@@ -575,54 +558,72 @@
             document.getElementById('expiredUsers').textContent = expired;
         }
 
-        // Display Users
+        function getStatus(user) {
+            if (user.is_premium === true) return 'premium';
+            try {
+                const endDate = new Date(user.trial_end_date);
+                if (endDate > new Date()) return 'trial';
+            } catch {
+                // no-op
+            }
+            return 'expired';
+        }
+
+        function getEndDateText(user) {
+            try {
+                const dateField = user.is_premium && user.subscription_end_date
+                    ? user.subscription_end_date
+                    : user.trial_end_date;
+                return new Date(dateField).toLocaleDateString('ar-EG');
+            } catch {
+                return 'تاريخ غير صحيح';
+            }
+        }
+
         function displayUsers(users) {
             const tableDiv = document.getElementById('usersTable');
-            
+
             if (users.length === 0) {
-                tableDiv.innerHTML = '<div class="loading">لا يوجد مستخدمين أو لم يتم التحميل بعد</div>';
+                tableDiv.innerHTML = '<div class="loading">لا يوجد مستخدمون أو لم يتم التحميل بعد</div>';
                 return;
             }
 
             let html = `
                 <div class="users-table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>الإجراءات</th>
-                            <th>الحالة</th>
-                            <th>تاريخ الانتهاء</th>
-                            <th>البريد الإلكتروني</th>
-                            <th>الاسم</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الإجراءات</th>
+                                <th>الحالة</th>
+                                <th>تاريخ الانتهاء</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>الاسم</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
 
-            users.forEach(user => {
+            users.forEach((user) => {
                 const status = getStatus(user);
-                const statusClass = status === 'premium' ? 'status-premium' : 
-                                  status === 'trial' ? 'status-trial' : 'status-expired';
-                const statusText = status === 'premium' ? 'مميز' : 
-                                 status === 'trial' ? 'تجربة' : 'منتهي';
-                
-                let endDateText = 'غير محدد';
-                try {
-                    const dateField = user.is_premium && user.subscription_end_date 
-                        ? user.subscription_end_date 
-                        : user.trial_end_date;
-                    endDateText = new Date(dateField).toLocaleDateString('ar-EG');
-                } catch {
-                    endDateText = 'تاريخ غير صحيح';
-                }
+                const statusClass = status === 'premium'
+                    ? 'status-premium'
+                    : status === 'trial'
+                        ? 'status-trial'
+                        : 'status-expired';
+                const statusText = status === 'premium'
+                    ? 'مميز'
+                    : status === 'trial'
+                        ? 'تجربة'
+                        : 'منتهي';
+                const endDateText = getEndDateText(user);
 
                 html += `
                     <tr>
                         <td>
                             <div class="actions">
-                                ${!user.is_premium ? 
-                                    `<button class="btn btn-success" onclick="activateUser('${user.id}')">تفعيل</button>` :
-                                    `<button class="btn btn-danger" onclick="deactivateUser('${user.id}')">إلغاء</button>`
+                                ${!user.is_premium
+                                    ? `<button class="btn btn-success" onclick="activateUser('${user.id}')">تفعيل</button>`
+                                    : `<button class="btn btn-danger" onclick="deactivateUser('${user.id}')">إلغاء</button>`
                                 }
                                 <button class="btn btn-danger" onclick="deleteUser('${user.id}')">حذف</button>
                             </div>
@@ -636,28 +637,25 @@
             });
 
             html += `
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="mobile-users-list">
             `;
 
-            users.forEach(user => {
+            users.forEach((user) => {
                 const status = getStatus(user);
-                const statusClass = status === 'premium' ? 'status-premium' : 
-                                  status === 'trial' ? 'status-trial' : 'status-expired';
-                const statusText = status === 'premium' ? 'Ù…Ù…ÙŠØ²' : 
-                                 status === 'trial' ? 'ØªØ¬Ø±Ø¨Ø©' : 'Ù…Ù†ØªÙ‡ÙŠ';
-                
-                let endDateText = 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';
-                try {
-                    const dateField = user.is_premium && user.subscription_end_date 
-                        ? user.subscription_end_date 
-                        : user.trial_end_date;
-                    endDateText = new Date(dateField).toLocaleDateString('ar-EG');
-                } catch {
-                    endDateText = 'ØªØ§Ø±ÙŠØ® ØºÙŠØ± ØµØ­ÙŠØ­';
-                }
+                const statusClass = status === 'premium'
+                    ? 'status-premium'
+                    : status === 'trial'
+                        ? 'status-trial'
+                        : 'status-expired';
+                const statusText = status === 'premium'
+                    ? 'مميز'
+                    : status === 'trial'
+                        ? 'تجربة'
+                        : 'منتهي';
+                const endDateText = getEndDateText(user);
 
                 html += `
                     <div class="user-card">
@@ -671,21 +669,21 @@
 
                         <div class="user-card-body">
                             <div class="user-card-row">
-                                <span class="user-card-label">Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ</span>
+                                <span class="user-card-label">البريد الإلكتروني</span>
                                 <span class="user-card-value">${user.email}</span>
                             </div>
                             <div class="user-card-row">
-                                <span class="user-card-label">ØªØ§Ø±ÙŠØ® Ø§Ù„Ø§Ù†ØªÙ‡Ø§Ø¡</span>
+                                <span class="user-card-label">تاريخ الانتهاء</span>
                                 <span class="user-card-value">${endDateText}</span>
                             </div>
                         </div>
 
                         <div class="user-card-actions">
-                            ${!user.is_premium ? 
-                                `<button class="btn btn-success" onclick="activateUser('${user.id}')">ØªÙØ¹ÙŠÙ„</button>` :
-                                `<button class="btn btn-danger" onclick="deactivateUser('${user.id}')">Ø¥Ù„ØºØ§Ø¡</button>`
+                            ${!user.is_premium
+                                ? `<button class="btn btn-success" onclick="activateUser('${user.id}')">تفعيل</button>`
+                                : `<button class="btn btn-danger" onclick="deactivateUser('${user.id}')">إلغاء</button>`
                             }
-                            <button class="btn btn-danger" onclick="deleteUser('${user.id}')">Ø­Ø°Ù</button>
+                            <button class="btn btn-danger" onclick="deleteUser('${user.id}')">حذف</button>
                         </div>
                     </div>
                 `;
@@ -695,29 +693,15 @@
             tableDiv.innerHTML = html;
         }
 
-        // Get User Status
-        function getStatus(user) {
-            if (user.is_premium === true) return 'premium';
-            try {
-                const endDate = new Date(user.trial_end_date);
-                if (endDate > new Date()) return 'trial';
-            } catch {
-                // إذا فشل تحليل التاريخ
-            }
-            return 'expired';
-        }
-
-        // Filter Users
         window.filterUsers = function() {
             const searchTerm = document.getElementById('searchBox').value.toLowerCase();
-            const filtered = allUsers.filter(user => 
+            const filtered = allUsers.filter((user) =>
                 user.email.toLowerCase().includes(searchTerm) ||
                 (user.displayName && user.displayName.toLowerCase().includes(searchTerm))
             );
             displayUsers(filtered);
         };
 
-        // Activate User
         window.activateUser = async function(userId) {
             if (!confirm('هل أنت متأكد من تفعيل هذا المستخدم؟')) return;
 
@@ -742,7 +726,6 @@
             }
         };
 
-        // Deactivate User
         window.deactivateUser = async function(userId) {
             if (!confirm('هل أنت متأكد من إلغاء اشتراك هذا المستخدم؟')) return;
 
@@ -761,9 +744,8 @@
             }
         };
 
-        // Delete User
         window.deleteUser = async function(userId) {
-            if (!confirm('⚠️ تحذير: هل أنت متأكد من حذف هذا المستخدم نهائياً؟\nلا يمكن التراجع عن هذا الإجراء!')) return;
+            if (!confirm('تحذير: هل أنت متأكد من حذف هذا المستخدم نهائيًا؟\nلا يمكن التراجع عن هذا الإجراء!')) return;
 
             try {
                 const userRef = doc(db, 'users', userId);
