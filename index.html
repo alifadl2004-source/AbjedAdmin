@@ -127,6 +127,76 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
+        .panel-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .notification-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .notification-grid input,
+        .notification-grid select,
+        .notification-message {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .notification-message {
+            min-height: 110px;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        .notification-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .notification-item {
+            border: 1px solid #ececec;
+            border-radius: 12px;
+            padding: 14px;
+            background: #fafafa;
+        }
+
+        .notification-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .notification-item-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .notification-item-meta {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .notification-link {
+            color: #1565c0;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
         .users-toolbar {
             display: flex;
             justify-content: space-between;
@@ -428,6 +498,36 @@
                 </div>
             </div>
 
+            <div class="panel-section">
+                <div class="users-toolbar">
+                    <h2>إرسال إشعار للتطبيق</h2>
+                    <div class="actions">
+                        <button class="btn btn-primary" id="notificationSubmitButton" onclick="sendNotification()">إرسال الإشعار</button>
+                        <button class="btn btn-warning hidden" id="notificationCancelButton" onclick="cancelNotificationEdit()">إلغاء التعديل</button>
+                    </div>
+                </div>
+
+                <div class="notification-grid">
+                    <input type="text" id="notificationTitle" placeholder="عنوان الإشعار">
+                    <select id="notificationType">
+                        <option value="note">ملاحظة</option>
+                        <option value="update">تحديث</option>
+                    </select>
+                    <select id="notificationAudience">
+                        <option value="all">كل المستخدمين</option>
+                        <option value="authenticated">المسجلون فقط</option>
+                        <option value="premium">المشتركون المميزون</option>
+                        <option value="guests">الزوار فقط</option>
+                    </select>
+                    <input type="text" id="notificationLink" placeholder="رابط اختياري للتحديث أو الملاحظة">
+                    <input type="text" id="notificationLinkLabel" placeholder="نص زر الرابط مثل: تحميل التحديث">
+                </div>
+
+                <textarea id="notificationBody" class="notification-message" placeholder="نص الإشعار أو الملاحظة"></textarea>
+                <div id="notificationStatus"></div>
+                <div id="notificationsList" class="notification-list"></div>
+            </div>
+
             <div class="users-section">
                 <div class="users-toolbar">
                     <h2>قائمة المستخدمين</h2>
@@ -446,7 +546,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc, serverTimestamp, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyAtlvi9FkkEn-opEaYpicOgIJO_1z1ZOds",
@@ -464,6 +564,8 @@
 
         let allUsers = [];
         let currentAdmin = null;
+        let latestNotifications = [];
+        let editingNotificationId = null;
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -471,6 +573,7 @@
                 document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('dashboardSection').classList.remove('hidden');
                 loadUsers();
+                loadNotifications();
             } else {
                 currentAdmin = null;
                 document.getElementById('loginSection').classList.remove('hidden');
@@ -489,6 +592,7 @@
                 document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('dashboardSection').classList.remove('hidden');
                 await loadUsers();
+                await loadNotifications();
             } catch (error) {
                 errorDiv.innerHTML = `<div class="error">خطأ: ${error.message}</div>`;
             }
@@ -528,6 +632,64 @@
                 console.error('Error loading users:', error);
                 document.getElementById('usersTable').innerHTML = `<div class="error">خطأ في تحميل المستخدمين: ${error.message}</div>`;
             }
+        }
+
+        async function loadNotifications() {
+            try {
+                const snapshot = await getDocs(query(collection(db, 'app_notifications'), orderBy('createdAt', 'desc'), limit(10)));
+                latestNotifications = snapshot.docs.map((documentItem) => ({
+                    id: documentItem.id,
+                    ...documentItem.data()
+                }));
+                renderNotifications();
+            } catch (error) {
+                document.getElementById('notificationsList').innerHTML = `<div class="error">خطأ في تحميل الإشعارات: ${error.message}</div>`;
+            }
+        }
+
+        function formatNotificationDate(value) {
+            try {
+                const date = value?.toDate ? value.toDate() : new Date(value);
+                return date.toLocaleString('ar-EG');
+            } catch {
+                return 'بدون تاريخ';
+            }
+        }
+
+        function renderNotifications() {
+            const wrap = document.getElementById('notificationsList');
+            if (!latestNotifications.length) {
+                wrap.innerHTML = '<div class="loading">لا توجد إشعارات مرسلة بعد.</div>';
+                return;
+            }
+
+            wrap.innerHTML = latestNotifications.map((item) => `
+                <div class="notification-item">
+                    <div class="notification-item-header">
+                        <div class="notification-item-title">${item.title || 'بدون عنوان'}</div>
+                        <span class="status-badge ${item.type === 'update' ? 'status-expired' : 'status-premium'}">${item.type === 'update' ? 'تحديث' : 'ملاحظة'}</span>
+                    </div>
+                    <div class="notification-item-meta">الفئة: ${item.audience || 'all'} | التاريخ: ${formatNotificationDate(item.createdAt)}</div>
+                    <div style="margin-bottom:8px; color:#333;">${item.body || ''}</div>
+                    ${item.linkUrl ? `<a class="notification-link" href="${item.linkUrl}" target="_blank" rel="noopener noreferrer">${item.linkLabel || item.linkUrl}</a>` : ''}
+                    <div class="actions" style="margin-top:12px;">
+                        <button class="btn btn-primary" onclick="editNotification('${item.id}')">تعديل</button>
+                        <button class="btn btn-danger" onclick="deleteNotification('${item.id}')">حذف</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function resetNotificationForm() {
+            editingNotificationId = null;
+            document.getElementById('notificationTitle').value = '';
+            document.getElementById('notificationBody').value = '';
+            document.getElementById('notificationType').value = 'note';
+            document.getElementById('notificationAudience').value = 'all';
+            document.getElementById('notificationLink').value = '';
+            document.getElementById('notificationLinkLabel').value = '';
+            document.getElementById('notificationSubmitButton').textContent = 'إرسال الإشعار';
+            document.getElementById('notificationCancelButton').classList.add('hidden');
         }
 
         function updateStats() {
@@ -700,6 +862,90 @@
                 (user.displayName && user.displayName.toLowerCase().includes(searchTerm))
             );
             displayUsers(filtered);
+        };
+
+        window.sendNotification = async function() {
+            const title = document.getElementById('notificationTitle').value.trim();
+            const body = document.getElementById('notificationBody').value.trim();
+            const type = document.getElementById('notificationType').value;
+            const audience = document.getElementById('notificationAudience').value;
+            const linkUrl = document.getElementById('notificationLink').value.trim();
+            const linkLabel = document.getElementById('notificationLinkLabel').value.trim();
+            const statusBox = document.getElementById('notificationStatus');
+
+            if (!title || !body) {
+                statusBox.innerHTML = '<div class="error">أدخل عنوان الإشعار ونصه أولًا.</div>';
+                return;
+            }
+
+            try {
+                const payload = {
+                    title,
+                    body,
+                    type,
+                    audience,
+                    linkUrl,
+                    linkLabel,
+                    isPublished: true,
+                    createdBy: currentAdmin?.email || ''
+                };
+
+                if (editingNotificationId) {
+                    await updateDoc(doc(db, 'app_notifications', editingNotificationId), {
+                        ...payload,
+                        updatedAt: serverTimestamp()
+                    });
+                    statusBox.innerHTML = '<div class="success">تم تعديل الإشعار بنجاح.</div>';
+                } else {
+                    await addDoc(collection(db, 'app_notifications'), {
+                        ...payload,
+                        createdAt: serverTimestamp()
+                    });
+                    statusBox.innerHTML = '<div class="success">تم إرسال الإشعار بنجاح.</div>';
+                }
+
+                resetNotificationForm();
+                await loadNotifications();
+            } catch (error) {
+                statusBox.innerHTML = `<div class="error">فشل إرسال الإشعار: ${error.message}</div>`;
+            }
+        };
+
+        window.editNotification = function(notificationId) {
+            const item = latestNotifications.find((entry) => entry.id === notificationId);
+            if (!item) return;
+
+            editingNotificationId = notificationId;
+            document.getElementById('notificationTitle').value = item.title || '';
+            document.getElementById('notificationBody').value = item.body || '';
+            document.getElementById('notificationType').value = item.type || 'note';
+            document.getElementById('notificationAudience').value = item.audience || 'all';
+            document.getElementById('notificationLink').value = item.linkUrl || '';
+            document.getElementById('notificationLinkLabel').value = item.linkLabel || '';
+            document.getElementById('notificationSubmitButton').textContent = 'حفظ التعديل';
+            document.getElementById('notificationCancelButton').classList.remove('hidden');
+            document.getElementById('notificationStatus').innerHTML = '<div class="success">تم تحميل بيانات الإشعار للتعديل.</div>';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.cancelNotificationEdit = function() {
+            resetNotificationForm();
+            document.getElementById('notificationStatus').innerHTML = '';
+        };
+
+        window.deleteNotification = async function(notificationId) {
+            if (!confirm('هل أنت متأكد من حذف هذا الإشعار؟')) return;
+
+            try {
+                await deleteDoc(doc(db, 'app_notifications', notificationId));
+                if (editingNotificationId === notificationId) {
+                    resetNotificationForm();
+                }
+                document.getElementById('notificationStatus').innerHTML = '<div class="success">تم حذف الإشعار بنجاح.</div>';
+                await loadNotifications();
+            } catch (error) {
+                document.getElementById('notificationStatus').innerHTML = `<div class="error">فشل حذف الإشعار: ${error.message}</div>`;
+            }
         };
 
         window.activateUser = async function(userId) {
