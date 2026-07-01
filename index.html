@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الاشتراكات</title>
+    <title>لوحة تحكم اشتراكات أبجد</title>
     <style>
         * {
             margin: 0;
@@ -466,7 +466,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>لوحة تحكم الاشتراكات</h1>
+            <h1>لوحة تحكم اشتراكات أبجد</h1>
             <p>إدارة المستخدمين والاشتراكات</p>
         </div>
 
@@ -503,6 +503,7 @@
                     <h2>إرسال إشعار للتطبيق</h2>
                     <div class="actions">
                         <button class="btn btn-primary" id="notificationSubmitButton" onclick="sendNotification()">إرسال الإشعار</button>
+                        <button class="btn btn-success" onclick="sendPushNotification()">إرسال Push 🔔</button>
                         <button class="btn btn-warning hidden" id="notificationCancelButton" onclick="cancelNotificationEdit()">إلغاء التعديل</button>
                     </div>
                 </div>
@@ -931,6 +932,51 @@
         window.cancelNotificationEdit = function() {
             resetNotificationForm();
             document.getElementById('notificationStatus').innerHTML = '';
+        };
+
+        window.sendPushNotification = async function() {
+            const title = document.getElementById('notificationTitle').value.trim();
+            const body = document.getElementById('notificationBody').value.trim();
+            const audience = document.getElementById('notificationAudience').value;
+            const statusBox = document.getElementById('notificationStatus');
+
+            if (!title || !body) {
+                statusBox.innerHTML = '<div class="error">أدخل عنوان الإشعار ونصه أولًا.</div>';
+                return;
+            }
+
+            try {
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                const tokens = [];
+
+                usersSnapshot.forEach((docItem) => {
+                    const data = docItem.data();
+                    if (!data.expoPushToken) return;
+                    if (audience === 'all' || audience === 'authenticated') { tokens.push(data.expoPushToken); return; }
+                    if (audience === 'premium' && data.is_premium) { tokens.push(data.expoPushToken); return; }
+                });
+
+                if (!tokens.length) {
+                    statusBox.innerHTML = '<div class="error">لا يوجد مستخدمون لديهم push token مسجل.</div>';
+                    return;
+                }
+
+                const chunks = [];
+                for (let i = 0; i < tokens.length; i += 100) chunks.push(tokens.slice(i, i + 100));
+
+                for (const chunk of chunks) {
+                    const messages = chunk.map(token => ({ to: token, title, body, sound: 'default' }));
+                    await fetch('https://exp.host/--/api/v2/push/send', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(messages)
+                    });
+                }
+
+                statusBox.innerHTML = `<div class="success">تم إرسال Push لـ ${tokens.length} مستخدم بنجاح. 🔔</div>`;
+            } catch (error) {
+                statusBox.innerHTML = `<div class="error">فشل إرسال Push: ${error.message}</div>`;
+            }
         };
 
         window.deleteNotification = async function(notificationId) {
