@@ -27,7 +27,7 @@
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             margin-bottom: 30px;
             text-align: center;
         }
@@ -45,7 +45,7 @@
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             margin-bottom: 30px;
         }
 
@@ -104,7 +104,7 @@
             background: white;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
 
@@ -124,7 +124,85 @@
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .notification-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .notification-grid input,
+        .notification-grid select,
+        .notification-message {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .notification-message {
+            min-height: 110px;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        .notification-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .notification-item {
+            border: 1px solid #ececec;
+            border-radius: 12px;
+            padding: 14px;
+            background: #fafafa;
+        }
+
+        .notification-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .notification-item-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .notification-item-meta {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .notification-link {
+            color: #1565c0;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .users-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .search-box {
@@ -136,8 +214,16 @@
             font-size: 16px;
         }
 
+        .users-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 12px;
+        }
+
         table {
             width: 100%;
+            min-width: 760px;
             border-collapse: collapse;
         }
 
@@ -179,10 +265,95 @@
             display: flex;
             gap: 10px;
             justify-content: flex-end;
+            flex-wrap: wrap;
         }
 
         .actions button {
             padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .mobile-users-list {
+            display: none;
+        }
+
+        .user-card {
+            border: 1px solid #ececec;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .user-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .user-card-name {
+            color: #222;
+            font-size: 16px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .user-card-email {
+            color: #666;
+            font-size: 13px;
+            margin-top: 4px;
+            word-break: break-all;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .user-card-body {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .user-card-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .user-card-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .user-card-label {
+            color: #777;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .user-card-value {
+            color: #222;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        .user-card-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .user-card-actions .btn {
+            width: 100%;
+            padding: 10px 12px;
             font-size: 14px;
         }
 
@@ -212,16 +383,93 @@
             border-radius: 8px;
             margin: 20px 0;
         }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .header,
+            .login-section,
+            .users-section,
+            .stat-card {
+                padding: 18px;
+                border-radius: 14px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+                line-height: 1.4;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .stat-card .number {
+                font-size: 30px;
+            }
+
+            .users-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .users-toolbar h2,
+            .users-toolbar .btn {
+                width: 100%;
+            }
+
+            .users-toolbar .btn {
+                padding: 12px 18px;
+            }
+
+            .users-table-wrapper {
+                display: none;
+            }
+
+            .mobile-users-list {
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .user-card-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .user-card-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .user-card-value {
+                text-align: right;
+            }
+
+            .user-card-actions {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎓 لوحة تحكم الاشتراكات</h1>
+            <h1>لوحة تحكم الاشتراكات</h1>
             <p>إدارة المستخدمين والاشتراكات</p>
         </div>
 
-        <!-- Login Section -->
         <div id="loginSection" class="login-section">
             <h2 style="margin-bottom: 20px;">تسجيل دخول المسؤول</h2>
             <input type="email" id="adminEmail" placeholder="البريد الإلكتروني">
@@ -230,9 +478,7 @@
             <div id="loginError"></div>
         </div>
 
-        <!-- Dashboard Section -->
         <div id="dashboardSection" class="hidden">
-            <!-- Statistics -->
             <div class="stats">
                 <div class="stat-card">
                     <h3>إجمالي المستخدمين</h3>
@@ -252,15 +498,45 @@
                 </div>
             </div>
 
-            <!-- Users Table -->
+            <div class="panel-section">
+                <div class="users-toolbar">
+                    <h2>إرسال إشعار للتطبيق</h2>
+                    <div class="actions">
+                        <button class="btn btn-primary" id="notificationSubmitButton" onclick="sendNotification()">إرسال الإشعار</button>
+                        <button class="btn btn-success" onclick="sendPushNotification()">إرسال Push 🔔</button>
+                        <button class="btn btn-warning hidden" id="notificationCancelButton" onclick="cancelNotificationEdit()">إلغاء التعديل</button>
+                    </div>
+                </div>
+
+                <div class="notification-grid">
+                    <input type="text" id="notificationTitle" placeholder="عنوان الإشعار">
+                    <select id="notificationType">
+                        <option value="note">ملاحظة</option>
+                        <option value="update">تحديث</option>
+                    </select>
+                    <select id="notificationAudience">
+                        <option value="all">كل المستخدمين</option>
+                        <option value="authenticated">المسجلون فقط</option>
+                        <option value="premium">المشتركون المميزون</option>
+                        <option value="guests">الزوار فقط</option>
+                    </select>
+                    <input type="text" id="notificationLink" placeholder="رابط اختياري للتحديث أو الملاحظة">
+                    <input type="text" id="notificationLinkLabel" placeholder="نص زر الرابط مثل: تحميل التحديث">
+                </div>
+
+                <textarea id="notificationBody" class="notification-message" placeholder="نص الإشعار أو الملاحظة"></textarea>
+                <div id="notificationStatus"></div>
+                <div id="notificationsList" class="notification-list"></div>
+            </div>
+
             <div class="users-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div class="users-toolbar">
                     <h2>قائمة المستخدمين</h2>
                     <button class="btn btn-warning" onclick="logout()">تسجيل الخروج</button>
                 </div>
-                
-                <input type="text" class="search-box" id="searchBox" placeholder="🔍 البحث عن مستخدم..." onkeyup="filterUsers()">
-                
+
+                <input type="text" class="search-box" id="searchBox" placeholder="البحث عن مستخدم..." onkeyup="filterUsers()">
+
                 <div id="usersTable">
                     <div class="loading">جاري تحميل البيانات...</div>
                 </div>
@@ -268,13 +544,11 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc, serverTimestamp, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAtlvi9FkkEn-opEaYpicOgIJO_1z1ZOds",
             authDomain: "abjedsub.firebaseapp.com",
@@ -291,14 +565,16 @@
 
         let allUsers = [];
         let currentAdmin = null;
+        let latestNotifications = [];
+        let editingNotificationId = null;
 
-        // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentAdmin = user;
                 document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('dashboardSection').classList.remove('hidden');
                 loadUsers();
+                loadNotifications();
             } else {
                 currentAdmin = null;
                 document.getElementById('loginSection').classList.remove('hidden');
@@ -306,7 +582,6 @@
             }
         });
 
-        // Admin Login
         window.adminLogin = async function() {
             const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
@@ -315,17 +590,15 @@
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 currentAdmin = userCredential.user;
-                
                 document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('dashboardSection').classList.remove('hidden');
-                
                 await loadUsers();
+                await loadNotifications();
             } catch (error) {
                 errorDiv.innerHTML = `<div class="error">خطأ: ${error.message}</div>`;
             }
         };
 
-        // Logout
         window.logout = async function() {
             await signOut(auth);
             document.getElementById('loginSection').classList.remove('hidden');
@@ -333,21 +606,19 @@
             currentAdmin = null;
         };
 
-        // Load Users
         async function loadUsers() {
             try {
                 const usersSnapshot = await getDocs(collection(db, 'users'));
                 allUsers = [];
-                
+
                 console.log('Total users found:', usersSnapshot.size);
-                
-                usersSnapshot.forEach((doc) => {
-                    const userData = doc.data();
+
+                usersSnapshot.forEach((documentItem) => {
+                    const userData = documentItem.data();
                     console.log('User data:', userData);
-                    allUsers.push({ 
-                        id: doc.id, 
+                    allUsers.push({
+                        id: documentItem.id,
                         ...userData,
-                        // تأكد من وجود الحقول الضرورية
                         email: userData.email || 'غير محدد',
                         displayName: userData.displayName || userData.display_name || 'غير محدد',
                         is_premium: userData.is_premium || false,
@@ -364,11 +635,68 @@
             }
         }
 
-        // Update Statistics
+        async function loadNotifications() {
+            try {
+                const snapshot = await getDocs(query(collection(db, 'app_notifications'), orderBy('createdAt', 'desc'), limit(10)));
+                latestNotifications = snapshot.docs.map((documentItem) => ({
+                    id: documentItem.id,
+                    ...documentItem.data()
+                }));
+                renderNotifications();
+            } catch (error) {
+                document.getElementById('notificationsList').innerHTML = `<div class="error">خطأ في تحميل الإشعارات: ${error.message}</div>`;
+            }
+        }
+
+        function formatNotificationDate(value) {
+            try {
+                const date = value?.toDate ? value.toDate() : new Date(value);
+                return date.toLocaleString('ar-EG');
+            } catch {
+                return 'بدون تاريخ';
+            }
+        }
+
+        function renderNotifications() {
+            const wrap = document.getElementById('notificationsList');
+            if (!latestNotifications.length) {
+                wrap.innerHTML = '<div class="loading">لا توجد إشعارات مرسلة بعد.</div>';
+                return;
+            }
+
+            wrap.innerHTML = latestNotifications.map((item) => `
+                <div class="notification-item">
+                    <div class="notification-item-header">
+                        <div class="notification-item-title">${item.title || 'بدون عنوان'}</div>
+                        <span class="status-badge ${item.type === 'update' ? 'status-expired' : 'status-premium'}">${item.type === 'update' ? 'تحديث' : 'ملاحظة'}</span>
+                    </div>
+                    <div class="notification-item-meta">الفئة: ${item.audience || 'all'} | التاريخ: ${formatNotificationDate(item.createdAt)}</div>
+                    <div style="margin-bottom:8px; color:#333;">${item.body || ''}</div>
+                    ${item.linkUrl ? `<a class="notification-link" href="${item.linkUrl}" target="_blank" rel="noopener noreferrer">${item.linkLabel || item.linkUrl}</a>` : ''}
+                    <div class="actions" style="margin-top:12px;">
+                        <button class="btn btn-primary" onclick="editNotification('${item.id}')">تعديل</button>
+                        <button class="btn btn-danger" onclick="deleteNotification('${item.id}')">حذف</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function resetNotificationForm() {
+            editingNotificationId = null;
+            document.getElementById('notificationTitle').value = '';
+            document.getElementById('notificationBody').value = '';
+            document.getElementById('notificationType').value = 'note';
+            document.getElementById('notificationAudience').value = 'all';
+            document.getElementById('notificationLink').value = '';
+            document.getElementById('notificationLinkLabel').value = '';
+            document.getElementById('notificationSubmitButton').textContent = 'إرسال الإشعار';
+            document.getElementById('notificationCancelButton').classList.add('hidden');
+        }
+
         function updateStats() {
             const total = allUsers.length;
-            const premium = allUsers.filter(u => u.is_premium === true).length;
-            const trial = allUsers.filter(u => {
+            const premium = allUsers.filter((u) => u.is_premium === true).length;
+            const trial = allUsers.filter((u) => {
                 if (u.is_premium) return false;
                 try {
                     const endDate = new Date(u.trial_end_date);
@@ -377,7 +705,7 @@
                     return false;
                 }
             }).length;
-            const expired = allUsers.filter(u => {
+            const expired = allUsers.filter((u) => {
                 if (u.is_premium) return false;
                 try {
                     const endDate = new Date(u.trial_end_date);
@@ -393,53 +721,72 @@
             document.getElementById('expiredUsers').textContent = expired;
         }
 
-        // Display Users
+        function getStatus(user) {
+            if (user.is_premium === true) return 'premium';
+            try {
+                const endDate = new Date(user.trial_end_date);
+                if (endDate > new Date()) return 'trial';
+            } catch {
+                // no-op
+            }
+            return 'expired';
+        }
+
+        function getEndDateText(user) {
+            try {
+                const dateField = user.is_premium && user.subscription_end_date
+                    ? user.subscription_end_date
+                    : user.trial_end_date;
+                return new Date(dateField).toLocaleDateString('ar-EG');
+            } catch {
+                return 'تاريخ غير صحيح';
+            }
+        }
+
         function displayUsers(users) {
             const tableDiv = document.getElementById('usersTable');
-            
+
             if (users.length === 0) {
-                tableDiv.innerHTML = '<div class="loading">لا يوجد مستخدمين أو لم يتم التحميل بعد</div>';
+                tableDiv.innerHTML = '<div class="loading">لا يوجد مستخدمون أو لم يتم التحميل بعد</div>';
                 return;
             }
 
             let html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>الإجراءات</th>
-                            <th>الحالة</th>
-                            <th>تاريخ الانتهاء</th>
-                            <th>البريد الإلكتروني</th>
-                            <th>الاسم</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="users-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الإجراءات</th>
+                                <th>الحالة</th>
+                                <th>تاريخ الانتهاء</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>الاسم</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
 
-            users.forEach(user => {
+            users.forEach((user) => {
                 const status = getStatus(user);
-                const statusClass = status === 'premium' ? 'status-premium' : 
-                                  status === 'trial' ? 'status-trial' : 'status-expired';
-                const statusText = status === 'premium' ? 'مميز' : 
-                                 status === 'trial' ? 'تجربة' : 'منتهي';
-                
-                let endDateText = 'غير محدد';
-                try {
-                    const dateField = user.is_premium && user.subscription_end_date 
-                        ? user.subscription_end_date 
-                        : user.trial_end_date;
-                    endDateText = new Date(dateField).toLocaleDateString('ar-EG');
-                } catch {
-                    endDateText = 'تاريخ غير صحيح';
-                }
+                const statusClass = status === 'premium'
+                    ? 'status-premium'
+                    : status === 'trial'
+                        ? 'status-trial'
+                        : 'status-expired';
+                const statusText = status === 'premium'
+                    ? 'مميز'
+                    : status === 'trial'
+                        ? 'تجربة'
+                        : 'منتهي';
+                const endDateText = getEndDateText(user);
 
                 html += `
                     <tr>
                         <td>
                             <div class="actions">
-                                ${!user.is_premium ? 
-                                    `<button class="btn btn-success" onclick="activateUser('${user.id}')">تفعيل</button>` :
-                                    `<button class="btn btn-danger" onclick="deactivateUser('${user.id}')">إلغاء</button>`
+                                ${!user.is_premium
+                                    ? `<button class="btn btn-success" onclick="activateUser('${user.id}')">تفعيل</button>`
+                                    : `<button class="btn btn-danger" onclick="deactivateUser('${user.id}')">إلغاء</button>`
                                 }
                                 <button class="btn btn-danger" onclick="deleteUser('${user.id}')">حذف</button>
                             </div>
@@ -452,33 +799,201 @@
                 `;
             });
 
-            html += '</tbody></table>';
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mobile-users-list">
+            `;
+
+            users.forEach((user) => {
+                const status = getStatus(user);
+                const statusClass = status === 'premium'
+                    ? 'status-premium'
+                    : status === 'trial'
+                        ? 'status-trial'
+                        : 'status-expired';
+                const statusText = status === 'premium'
+                    ? 'مميز'
+                    : status === 'trial'
+                        ? 'تجربة'
+                        : 'منتهي';
+                const endDateText = getEndDateText(user);
+
+                html += `
+                    <div class="user-card">
+                        <div class="user-card-header">
+                            <div>
+                                <div class="user-card-name">${user.displayName}</div>
+                                <div class="user-card-email">${user.email}</div>
+                            </div>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+
+                        <div class="user-card-body">
+                            <div class="user-card-row">
+                                <span class="user-card-label">البريد الإلكتروني</span>
+                                <span class="user-card-value">${user.email}</span>
+                            </div>
+                            <div class="user-card-row">
+                                <span class="user-card-label">تاريخ الانتهاء</span>
+                                <span class="user-card-value">${endDateText}</span>
+                            </div>
+                        </div>
+
+                        <div class="user-card-actions">
+                            ${!user.is_premium
+                                ? `<button class="btn btn-success" onclick="activateUser('${user.id}')">تفعيل</button>`
+                                : `<button class="btn btn-danger" onclick="deactivateUser('${user.id}')">إلغاء</button>`
+                            }
+                            <button class="btn btn-danger" onclick="deleteUser('${user.id}')">حذف</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
             tableDiv.innerHTML = html;
         }
 
-        // Get User Status
-        function getStatus(user) {
-            if (user.is_premium === true) return 'premium';
-            try {
-                const endDate = new Date(user.trial_end_date);
-                if (endDate > new Date()) return 'trial';
-            } catch {
-                // إذا فشل تحليل التاريخ
-            }
-            return 'expired';
-        }
-
-        // Filter Users
         window.filterUsers = function() {
             const searchTerm = document.getElementById('searchBox').value.toLowerCase();
-            const filtered = allUsers.filter(user => 
+            const filtered = allUsers.filter((user) =>
                 user.email.toLowerCase().includes(searchTerm) ||
                 (user.displayName && user.displayName.toLowerCase().includes(searchTerm))
             );
             displayUsers(filtered);
         };
 
-        // Activate User
+        window.sendNotification = async function() {
+            const title = document.getElementById('notificationTitle').value.trim();
+            const body = document.getElementById('notificationBody').value.trim();
+            const type = document.getElementById('notificationType').value;
+            const audience = document.getElementById('notificationAudience').value;
+            const linkUrl = document.getElementById('notificationLink').value.trim();
+            const linkLabel = document.getElementById('notificationLinkLabel').value.trim();
+            const statusBox = document.getElementById('notificationStatus');
+
+            if (!title || !body) {
+                statusBox.innerHTML = '<div class="error">أدخل عنوان الإشعار ونصه أولًا.</div>';
+                return;
+            }
+
+            try {
+                const payload = {
+                    title,
+                    body,
+                    type,
+                    audience,
+                    linkUrl,
+                    linkLabel,
+                    isPublished: true,
+                    createdBy: currentAdmin?.email || ''
+                };
+
+                if (editingNotificationId) {
+                    await updateDoc(doc(db, 'app_notifications', editingNotificationId), {
+                        ...payload,
+                        updatedAt: serverTimestamp()
+                    });
+                    statusBox.innerHTML = '<div class="success">تم تعديل الإشعار بنجاح.</div>';
+                } else {
+                    await addDoc(collection(db, 'app_notifications'), {
+                        ...payload,
+                        createdAt: serverTimestamp()
+                    });
+                    statusBox.innerHTML = '<div class="success">تم إرسال الإشعار بنجاح.</div>';
+                }
+
+                resetNotificationForm();
+                await loadNotifications();
+            } catch (error) {
+                statusBox.innerHTML = `<div class="error">فشل إرسال الإشعار: ${error.message}</div>`;
+            }
+        };
+
+        window.editNotification = function(notificationId) {
+            const item = latestNotifications.find((entry) => entry.id === notificationId);
+            if (!item) return;
+
+            editingNotificationId = notificationId;
+            document.getElementById('notificationTitle').value = item.title || '';
+            document.getElementById('notificationBody').value = item.body || '';
+            document.getElementById('notificationType').value = item.type || 'note';
+            document.getElementById('notificationAudience').value = item.audience || 'all';
+            document.getElementById('notificationLink').value = item.linkUrl || '';
+            document.getElementById('notificationLinkLabel').value = item.linkLabel || '';
+            document.getElementById('notificationSubmitButton').textContent = 'حفظ التعديل';
+            document.getElementById('notificationCancelButton').classList.remove('hidden');
+            document.getElementById('notificationStatus').innerHTML = '<div class="success">تم تحميل بيانات الإشعار للتعديل.</div>';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.cancelNotificationEdit = function() {
+            resetNotificationForm();
+            document.getElementById('notificationStatus').innerHTML = '';
+        };
+
+        window.sendPushNotification = async function() {
+            const title = document.getElementById('notificationTitle').value.trim();
+            const body = document.getElementById('notificationBody').value.trim();
+            const audience = document.getElementById('notificationAudience').value;
+            const statusBox = document.getElementById('notificationStatus');
+
+            if (!title || !body) {
+                statusBox.innerHTML = '<div class="error">أدخل عنوان الإشعار ونصه أولًا.</div>';
+                return;
+            }
+
+            try {
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                const tokens = [];
+
+                usersSnapshot.forEach((docItem) => {
+                    const data = docItem.data();
+                    if (!data.expoPushToken) return;
+                    if (audience === 'all' || audience === 'authenticated') { tokens.push(data.expoPushToken); return; }
+                    if (audience === 'premium' && data.is_premium) { tokens.push(data.expoPushToken); return; }
+                });
+
+                if (!tokens.length) {
+                    statusBox.innerHTML = '<div class="error">لا يوجد مستخدمون لديهم push token مسجل.</div>';
+                    return;
+                }
+
+                const chunks = [];
+                for (let i = 0; i < tokens.length; i += 100) chunks.push(tokens.slice(i, i + 100));
+
+                for (const chunk of chunks) {
+                    const messages = chunk.map(token => ({ to: token, title, body, sound: 'default' }));
+                    await fetch('https://exp.host/--/api/v2/push/send', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(messages)
+                    });
+                }
+
+                statusBox.innerHTML = `<div class="success">تم إرسال Push لـ ${tokens.length} مستخدم بنجاح. 🔔</div>`;
+            } catch (error) {
+                statusBox.innerHTML = `<div class="error">فشل إرسال Push: ${error.message}</div>`;
+            }
+        };
+
+        window.deleteNotification = async function(notificationId) {
+            if (!confirm('هل أنت متأكد من حذف هذا الإشعار؟')) return;
+
+            try {
+                await deleteDoc(doc(db, 'app_notifications', notificationId));
+                if (editingNotificationId === notificationId) {
+                    resetNotificationForm();
+                }
+                document.getElementById('notificationStatus').innerHTML = '<div class="success">تم حذف الإشعار بنجاح.</div>';
+                await loadNotifications();
+            } catch (error) {
+                document.getElementById('notificationStatus').innerHTML = `<div class="error">فشل حذف الإشعار: ${error.message}</div>`;
+            }
+        };
+
         window.activateUser = async function(userId) {
             if (!confirm('هل أنت متأكد من تفعيل هذا المستخدم؟')) return;
 
@@ -503,7 +1018,6 @@
             }
         };
 
-        // Deactivate User
         window.deactivateUser = async function(userId) {
             if (!confirm('هل أنت متأكد من إلغاء اشتراك هذا المستخدم؟')) return;
 
@@ -522,9 +1036,8 @@
             }
         };
 
-        // Delete User
         window.deleteUser = async function(userId) {
-            if (!confirm('⚠️ تحذير: هل أنت متأكد من حذف هذا المستخدم نهائياً؟\nلا يمكن التراجع عن هذا الإجراء!')) return;
+            if (!confirm('تحذير: هل أنت متأكد من حذف هذا المستخدم نهائيًا؟\nلا يمكن التراجع عن هذا الإجراء!')) return;
 
             try {
                 const userRef = doc(db, 'users', userId);
